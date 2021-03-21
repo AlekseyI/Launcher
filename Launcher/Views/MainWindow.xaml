@@ -1,0 +1,99 @@
+﻿<Window x:Class="Launcher.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Launcher"
+        mc:Ignorable="d"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+         Height="450" Width="800" ResizeMode="CanMinimize">
+    <Window.Title>
+        <MultiBinding StringFormat="{}{0} v. {1}">
+            <Binding Path="NameLauncher" />
+            <Binding Path="VersionLauncher" />
+        </MultiBinding>
+    </Window.Title>
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction 
+                Command="{Binding Path=OpenAuthDialogWindow}" />
+        </i:EventTrigger>
+
+    </i:Interaction.Triggers>
+    <Grid x:Name="LayoutRoot" Background="White">
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Grid.Resources>
+                <Style TargetType="Button">
+                    <Setter Property="Width" Value="80"/>
+                    <Setter Property="Height" Value="40"/>
+                    <Setter Property="FontSize" Value="13" />
+                </Style>
+            </Grid.Resources>
+            <StackPanel Orientation="Vertical" Margin="10 10 10 0" Grid.Column="0" Grid.ColumnSpan="4" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                <TextBlock Text="{Binding Path=SelectedRow.Name}"/>
+                <ProgressBar Grid.Column="0" Grid.ColumnSpan="4" Margin="0 5 0 0" Height="30" Value="{Binding Path=ProgressValue}" Minimum="0" Maximum="100" />
+            </StackPanel>
+            <Button Grid.Column="4" Content="Запустить" IsEnabled="{Binding Path=SelectedRow.IsButtonStart, FallbackValue=False}" Command="{Binding Path=ButtonStartCommand}" />
+            <Button Grid.Column="5" IsEnabled="{Binding Path=SelectedRow.IsButtonDownloadAndInstall, FallbackValue=False}" Command="{Binding Path=ButtonDownloadAndInstallCommand}" >
+                <TextBlock Text="Скачать и установить" TextWrapping="Wrap"/>
+            </Button>
+            <Button Grid.Column="6" Content="Обновить" IsEnabled="{Binding Path=SelectedRow.IsButtonUpdate, FallbackValue=False}" Command="{Binding Path=ButtonUpdateCommand}" />
+            <Button Grid.Column="7" Content="Удалить" IsEnabled="{Binding Path=SelectedRow.IsButtonRemove, FallbackValue=False}" Command="{Binding Path=ButtonRemoveCommand}" />
+        </Grid>
+        <DataGrid x:Name="TableProgram" IsEnabled="{Binding Path=IsEnabledTable, FallbackValue=True}" SelectedItem="{Binding Path=SelectedRow}" ItemsSource="{Binding Path=DataTable}"  IsReadOnly="True" AutoGenerateColumns="False" Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="1" Grid.RowSpan="4">
+            <DataGrid.Columns>
+                <DataGridTemplateColumn Header="Название" Width="*" MinWidth="300">
+                   <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Path=Name}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate> 
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Текущая версия" Width="*" MinWidth="100" MaxWidth="150">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Path=Version}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Новая версия" Width="*" MinWidth="100" MaxWidth="150">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Path=NewVersion}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Статус" Width="*" MinWidth="100">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Path=Status}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</Window>
